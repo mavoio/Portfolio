@@ -1,0 +1,106 @@
+---
+const skills = {
+  frontend: [
+    { name: 'React', level: 90 },
+    { name: 'TypeScript', level: 85 },
+    { name: 'Tailwind', level: 95 },
+    { name: 'Next.js', level: 88 },
+  ],
+  backend: [
+    { name: 'Node.js', level: 85 },
+    { name: 'Python', level: 80 },
+    { name: 'MongoDB', level: 85 },
+    { name: 'PostgreSQL', level: 82 },
+  ],
+  tools: [
+    { name: 'Git', level: 90 },
+    { name: 'Docker', level: 75 },
+    { name: 'AWS', level: 78 },
+    { name: 'Linux', level: 85 },
+  ]
+};
+
+const categoryIcons = {
+  frontend: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 8l-4 4m0 0l4 4m-4-4h18M17 8l4 4m0 0l-4 4m4-4H3"/></svg>`,
+  backend: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>`,
+  tools: `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`
+};
+---
+
+<section class="relative py-32 overflow-hidden" id="skills">
+  <!-- Background Elements -->
+  <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,black_70%,transparent_110%)]"></div>
+  
+  <!-- Content Container -->
+  <div class="relative max-w-6xl mx-auto px-4">
+    <!-- Section Header -->
+    <div class="text-center mb-20">
+      <h2 class="text-3xl sm:text-4xl font-light text-white mb-4 tracking-wider">Technical Expertise</h2>
+      <div class="h-px w-24 mx-auto bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+    </div>
+
+    <!-- Skills Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {
+        Object.entries(skills).map(([category, items]) => (
+          <div class="group relative">
+            <!-- Card Container -->
+            <div class="relative h-full">
+              <!-- Animated Border -->
+              <div class="absolute inset-0 rounded-xl bg-gradient-to-b from-white/10 via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              
+              <!-- Card Content -->
+              <div class="relative bg-white/[0.02] backdrop-blur-xl rounded-xl p-6 h-full border border-white/10 group-hover:border-white/20 transition-colors duration-500">
+                <!-- Category Header -->
+                <div class="flex items-center gap-3 mb-8">
+                  <!-- Icon Container -->
+                  <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 text-white/70 group-hover:text-white/90 group-hover:bg-white/10 transition-all duration-500">
+                    <Fragment set:html={categoryIcons[category]} />
+                  </div>
+                  <div>
+                    <h3 class="text-white/90 font-light tracking-wide capitalize">{category}</h3>
+                    <div class="h-px w-full bg-gradient-to-r from-white/20 to-transparent mt-2"></div>
+                  </div>
+                </div>
+
+                <!-- Skills List -->
+                <div class="space-y-6">
+                  {items.map((skill) => (
+                    <div class="space-y-2">
+                      <div class="flex items-center justify-between">
+                        <span class="text-sm text-white/80 tracking-wide">{skill.name}</span>
+                        <span class="text-xs text-white/40 tabular-nums">{skill.level}%</span>
+                      </div>
+                      <div class="relative h-1.5 bg-white/[0.03] rounded-full overflow-hidden group-hover:bg-white/[0.05] transition-colors duration-500">
+                        <div 
+                          class="absolute inset-y-0 left-0 bg-gradient-to-r from-white/20 via-white/20 to-white/10 rounded-full w-0 group-hover:w-full transition-all duration-[1.5s] ease-out"
+                          style={`width: ${skill.level}%`}
+                        >
+                          <div class="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.15)_50%,transparent_100%)] animate-shine"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <!-- Bottom Glow -->
+                <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes shine {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+
+  .animate-shine {
+    animation: shine 2s infinite;
+  }
+</style> 

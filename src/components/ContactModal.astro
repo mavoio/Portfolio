@@ -1,0 +1,139 @@
+<div id="contact-modal" class="fixed inset-0 z-50 hidden items-center justify-center">
+  <!-- Backdrop with advanced blur -->
+  <div class="absolute inset-0 bg-black/80 backdrop-blur-2xl"></div>
+  
+  <!-- Modal Container -->
+  <div class="relative w-full max-w-[400px] p-4">
+    <div class="relative transform transition-all duration-300" id="modal-content">
+      <!-- Premium Card Design -->
+      <div class="relative bg-gradient-to-b from-neutral-900/80 to-black/80 backdrop-blur-xl border border-white/10 rounded-lg overflow-hidden">
+        <!-- Top Design Element -->
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+        
+        <!-- Content -->
+        <div class="relative p-8">
+          <!-- Header -->
+          <div class="flex flex-col items-center">
+            <div class="relative">
+              <!-- Animated ring -->
+              <div class="absolute inset-0 rounded-full border border-white/20 animate-[ping_3s_ease-in-out_infinite]"></div>
+              <!-- Email icon -->
+              <div class="relative w-12 h-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl flex items-center justify-center">
+                <svg class="w-5 h-5 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+              </div>
+            </div>
+            
+            <div class="mt-6 space-y-1 text-center">
+              <h2 class="text-xl text-white font-light tracking-wide">Get in Touch</h2>
+              <p class="text-sm text-white/50">I'll get back to you as soon as possible</p>
+            </div>
+          </div>
+
+          <!-- Email Container -->
+          <div class="mt-8">
+            <div class="group relative">
+              <!-- Background with hover effect -->
+              <div class="absolute inset-0 bg-gradient-to-r from-white/[0.03] to-white/[0.01] group-hover:from-white/[0.05] group-hover:to-white/[0.02] rounded-lg transition-all duration-500"></div>
+              
+              <!-- Email content -->
+              <div id="email-container" class="relative border border-white/10 rounded-lg p-4 cursor-pointer overflow-hidden group-hover:border-white/20 transition-all duration-500">
+                <div class="flex items-center justify-between">
+                  <p class="text-white/90 font-light tracking-wide select-all">e_danish@outlook.com</p>
+                  <svg class="w-4 h-4 text-white/40 group-hover:text-white/60 transition-colors duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+                
+                <!-- Copy feedback -->
+                <div class="absolute inset-0 flex items-center justify-center bg-white/10 backdrop-blur-sm opacity-0 transition-opacity duration-300" id="copy-feedback">
+                  <span class="text-white text-sm">Copied to clipboard!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Design Element -->
+        <div class="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+      </div>
+
+      <!-- Close button -->
+      <button id="modal-close" class="absolute -top-12 right-0 flex items-center gap-2 text-white/50 hover:text-white transition-all duration-300 group">
+        <span class="text-xs tracking-wider">ESC</span>
+        <svg class="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('contact-modal');
+  const modalContent = document.getElementById('modal-content');
+  const closeBtn = document.getElementById('modal-close');
+  const emailContainer = document.getElementById('email-container');
+  const copyFeedback = document.getElementById('copy-feedback');
+
+  // Show modal with animation
+  window.showContactModal = function() {
+    if (modal) {
+      // First make it flex but invisible
+      modal.style.display = 'flex';
+      // Force reflow
+      modal.offsetHeight;
+      // Add transition class
+      modalContent.classList.add('scale-95', 'opacity-0', 'translate-y-4');
+      // Force reflow again
+      modalContent.offsetHeight;
+      // Remove transition class to trigger animation
+      modalContent.classList.remove('scale-95', 'opacity-0', 'translate-y-4');
+    }
+  };
+
+  // Hide modal with animation
+  function closeModal() {
+    if (modal && modalContent) {
+      modalContent.classList.add('scale-95', 'opacity-0', 'translate-y-4');
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 200);
+    }
+  }
+
+  // Close on button click
+  closeBtn?.addEventListener('click', closeModal);
+
+  // Close on backdrop click
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  // Close on ESC key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // Copy email with feedback animation
+  emailContainer?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText('e_danish@outlook.com');
+      if (copyFeedback) {
+        copyFeedback.style.opacity = '1';
+        setTimeout(() => {
+          copyFeedback.style.opacity = '0';
+        }, 1500);
+      }
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  });
+</script>
+
+<style>
+  #modal-content {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+</style> 

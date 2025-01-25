@@ -1,0 +1,392 @@
+---
+// Define chat responses based on keywords
+const chatResponses = {
+  skills: "I'm skilled in React, TypeScript, NextJS, Python, NodeJS, and more. Check out my skills section for details!",
+  experience: "I've been working as a freelance developer since 2020, specializing in full-stack development.",
+  contact: "You can reach me through the contact form. Just click the 'Get in touch' button at the top!",
+  projects: "I've worked on several projects including MavoSocial-OSINT, CC-Checker, and a NextJS Hosting Landing Page. Check out my projects section!",
+  location: "I'm based in Bangalore, India.",
+  education: "I'm a self-taught developer with expertise gained through hands-on projects and continuous learning.",
+  default: "Hello! I'm Danish's virtual assistant. Ask me about his skills, experience, projects, or how to get in touch!"
+};
+
+// Assistant profile image (base64 to avoid loading delay)
+const assistantImage = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/></svg>`;
+
+// Modern icons
+const chatIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="relative w-6 h-6 text-white/80 group-hover:text-white transition-colors duration-500 group-hover:scale-110 transform-gpu" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21a9 9 0 1 0-9-9c0 1.488.36 2.891 1 4.127L3 21l4.873-1c1.236.64 2.64 1 4.127 1Z"/>
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01"/>
+</svg>`;
+
+const closeIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="relative w-8 h-8 p-2 text-white/60 group-hover:text-white transition-colors duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.25 6.75L6.75 17.25M6.75 6.75l10.5 10.5"/>
+</svg>`;
+
+const sendIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/60 group-hover:text-white transition-colors duration-300 group-hover:scale-110 transform-gpu" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"/>
+</svg>`;
+
+// Quick option icons
+const quickIcons = {
+  experience: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/60 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`,
+  projects: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/60 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>`,
+  location: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/60 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`,
+  contact: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white/60 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`
+};
+---
+
+<div class="fixed bottom-6 right-6 z-50" id="chat-widget">
+  <!-- Chat Button -->
+  <button
+    id="chat-button"
+    class="group relative flex items-center justify-center w-14 h-14 rounded-2xl bg-black hover:scale-110 shadow-2xl transition-all duration-500"
+    aria-label="Open chat"
+  >
+    <!-- Button Glow Effect -->
+    <div class="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/20 via-white/10 to-transparent opacity-0 group-hover:opacity-100 blur transition-opacity duration-500"></div>
+    
+    <!-- Button Border -->
+    <div class="absolute inset-0 rounded-2xl border border-white/20 group-hover:border-white/40 transition-colors duration-500"></div>
+    
+    <!-- Icon -->
+    <Fragment set:html={chatIcon} />
+  </button>
+
+  <!-- Chat Interface -->
+  <div 
+    id="chat-interface"
+    class="hidden absolute bottom-20 right-0 w-[420px] bg-black/90 shadow-2xl overflow-hidden backdrop-blur-xl transform-gpu transition-all duration-500 ease-out rounded-3xl border border-white/10"
+  >
+    <!-- Glass Panel Effect -->
+    <div class="absolute inset-0 bg-gradient-to-b from-white/[0.15] to-transparent opacity-50"></div>
+    
+    <!-- Content Container -->
+    <div class="relative">
+      <!-- Chat Header -->
+      <div class="px-6 py-4 border-b border-white/10 backdrop-blur-sm bg-black/40">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="relative w-10 h-10 rounded-xl overflow-hidden border border-white/20">
+              <img 
+                src={assistantImage} 
+                alt="Assistant" 
+                class="w-full h-full object-cover filter brightness-[0.9] saturate-[0.8]"
+              />
+              <div class="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent"></div>
+            </div>
+            <div>
+              <h3 class="text-white font-medium tracking-wide text-sm">VIRTUAL ASSISTANT</h3>
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <div class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></div>
+                <span class="text-white/60 text-xs">Online</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Close Button -->
+          <button id="close-chat" class="relative group">
+            <div class="absolute inset-0 rounded-lg bg-white/0 group-hover:bg-white/10 transition-colors duration-300"></div>
+            <Fragment set:html={closeIcon} />
+          </button>
+        </div>
+      </div>
+
+      <!-- Chat Messages -->
+      <div id="chat-messages" class="h-[450px] overflow-y-auto py-6 px-6 space-y-6">
+        <!-- Welcome Messages -->
+        <div class="space-y-6 animate-fade-in">
+          <!-- Assistant Intro -->
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-10 h-10 rounded-xl overflow-hidden border border-white/20">
+              <img 
+                src={assistantImage} 
+                alt="Assistant" 
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="flex flex-col gap-1">
+              <div class="px-4 py-3 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 backdrop-blur-sm">
+                <p class="text-sm text-white/90">
+                  👋 Hi there! I'm Danish's AI assistant. I can help you learn more about:
+                </p>
+              </div>
+              <span class="text-[10px] text-white/40 ml-2">Assistant</span>
+            </div>
+          </div>
+
+          <!-- Quick Options -->
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-10 h-10 rounded-xl overflow-hidden border border-white/20">
+              <img 
+                src={assistantImage} 
+                alt="Assistant" 
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="flex flex-col gap-3 flex-1">
+              <div class="grid grid-cols-2 gap-2">
+                <button class="quick-option px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all duration-300 text-left">
+                  <Fragment set:html={quickIcons.experience} />
+                  <p class="text-sm text-white/90 font-medium">Experience</p>
+                  <p class="text-xs text-white/60 mt-0.5">Work history & skills</p>
+                </button>
+                <button class="quick-option px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all duration-300 text-left">
+                  <Fragment set:html={quickIcons.projects} />
+                  <p class="text-sm text-white/90 font-medium">Projects</p>
+                  <p class="text-xs text-white/60 mt-0.5">Portfolio showcase</p>
+                </button>
+                <button class="quick-option px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all duration-300 text-left">
+                  <Fragment set:html={quickIcons.location} />
+                  <p class="text-sm text-white/90 font-medium">Location</p>
+                  <p class="text-xs text-white/60 mt-0.5">Where to find me</p>
+                </button>
+                <button class="quick-option px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all duration-300 text-left">
+                  <Fragment set:html={quickIcons.contact} />
+                  <p class="text-sm text-white/90 font-medium">Contact</p>
+                  <p class="text-xs text-white/60 mt-0.5">Get in touch</p>
+                </button>
+              </div>
+              <span class="text-[10px] text-white/40 ml-2">Assistant</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input -->
+      <div class="p-6 border-t border-white/10 backdrop-blur-sm bg-black/40">
+        <form id="chat-form" class="relative">
+          <input
+            type="text"
+            id="chat-input"
+            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 pr-12 text-sm text-white placeholder-white/40 focus:outline-none focus:border-white/20 focus:ring-1 focus:ring-white/20 transition-all duration-300"
+            placeholder="Ask me anything..."
+          />
+          <button
+            type="submit"
+            class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-8 h-8 rounded-lg hover:bg-white/10 transition-colors duration-300 group"
+          >
+            <Fragment set:html={sendIcon} />
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Get DOM elements
+  const chatButton = document.getElementById('chat-button');
+  const chatInterface = document.getElementById('chat-interface');
+  const chatMessages = document.getElementById('chat-messages');
+  const chatForm = document.getElementById('chat-form');
+  const chatInput = document.getElementById('chat-input');
+  const closeChat = document.getElementById('close-chat');
+  const quickOptions = document.querySelectorAll('.quick-option');
+
+  // Chat responses object (same as above)
+  const chatResponses = {
+    skills: "I'm skilled in React, TypeScript, NextJS, Python, NodeJS, and more. Check out my skills section for details!",
+    experience: "I've been working as a freelance developer since 2020, specializing in full-stack development.",
+    contact: "You can reach me through the contact form. Just click the 'Get in touch' button at the top!",
+    projects: "I've worked on several projects including MavoSocial-OSINT, CC-Checker, and a NextJS Hosting Landing Page. Check out my projects section!",
+    location: "I'm based in Bangalore, India.",
+    education: "I'm a self-taught developer with expertise gained through hands-on projects and continuous learning.",
+    default: "Hello! I'm Danish's virtual assistant. Ask me about his skills, experience, projects, or how to get in touch!"
+  };
+
+  // Quick option click handlers
+  quickOptions.forEach(option => {
+    option.addEventListener('click', () => {
+      const text = option.querySelector('p').textContent.toLowerCase();
+      let query = '';
+      if (text.includes('experience')) query = 'experience';
+      else if (text.includes('projects')) query = 'projects';
+      else if (text.includes('location')) query = 'location';
+      else if (text.includes('contact')) query = 'contact';
+      
+      if (query) {
+        addMessage(query, 'user');
+        const dots = addTypingIndicator();
+        setTimeout(() => {
+          dots.remove();
+          addMessage(chatResponses[query], 'assistant');
+        }, 1000);
+      }
+    });
+  });
+
+  // Toggle chat interface
+  chatButton?.addEventListener('click', () => {
+    chatInterface?.classList.toggle('hidden');
+    chatInterface?.classList.toggle('animate-slide-in');
+    if (!chatInterface?.classList.contains('hidden')) {
+      chatInput?.focus();
+    }
+  });
+
+  // Close chat
+  closeChat?.addEventListener('click', () => {
+    chatInterface?.classList.add('hidden');
+  });
+
+  // Handle message submission
+  chatForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const message = chatInput?.value.trim();
+    if (!message) return;
+
+    // Add user message
+    addMessage(message, 'user');
+
+    // Clear input
+    chatInput.value = '';
+
+    // Get and add response with typing animation
+    const dots = addTypingIndicator();
+    
+    setTimeout(() => {
+      dots.remove();
+      const response = getResponse(message);
+      addMessage(response, 'assistant');
+    }, 1000);
+  });
+
+  // Add typing indicator
+  function addTypingIndicator() {
+    const dots = document.createElement('div');
+    dots.className = 'flex items-start gap-3 animate-fade-in';
+    dots.innerHTML = `
+      <div class="flex-shrink-0 w-10 h-10 rounded-xl overflow-hidden border border-white/20">
+        <img 
+          src="${assistantImage}" 
+          alt="Assistant" 
+          class="w-full h-full object-cover"
+        />
+      </div>
+      <div class="flex items-center gap-1 px-4 py-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
+        <div class="w-1.5 h-1.5 rounded-full bg-white/60 animate-bounce"></div>
+        <div class="w-1.5 h-1.5 rounded-full bg-white/60 animate-bounce" style="animation-delay: 0.2s"></div>
+        <div class="w-1.5 h-1.5 rounded-full bg-white/60 animate-bounce" style="animation-delay: 0.4s"></div>
+      </div>
+    `;
+    chatMessages?.appendChild(dots);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return dots;
+  }
+
+  // Get response based on keywords
+  function getResponse(message: string) {
+    const lowerMessage = message.toLowerCase();
+    const responses = {
+      skills: "I'm skilled in React, TypeScript, NextJS, Python, NodeJS, and more. Check out my skills section for details!",
+      experience: "I've been working as a freelance developer since 2020, specializing in full-stack development.",
+      contact: "You can reach me through the contact form. Just click the 'Get in touch' button at the top!",
+      projects: "I've worked on several projects including MavoSocial-OSINT, CC-Checker, and a NextJS Hosting Landing Page. Check out my projects section!",
+      location: "I'm based in Bangalore, India.",
+      education: "I'm a self-taught developer with expertise gained through hands-on projects and continuous learning.",
+      default: "Hello! I'm Danish's virtual assistant. Ask me about his skills, experience, projects, or how to get in touch!"
+    };
+
+    for (const [keyword, response] of Object.entries(responses)) {
+      if (lowerMessage.includes(keyword.toLowerCase())) {
+        return response;
+      }
+    }
+    return responses.default;
+  }
+
+  // Add message to chat
+  function addMessage(message: string, sender: 'user' | 'assistant') {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `flex items-start gap-3 animate-fade-in ${sender === 'user' ? 'flex-row-reverse' : ''}`;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'flex-shrink-0 w-10 h-10 rounded-xl overflow-hidden border border-white/20';
+    
+    const img = document.createElement('img');
+    img.src = sender === 'user' 
+      ? 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix' // Random avatar for user
+      : assistantImage;
+    img.alt = sender === 'user' ? 'User' : 'Assistant';
+    img.className = 'w-full h-full object-cover';
+    
+    avatar.appendChild(img);
+
+    const contentWrapper = document.createElement('div');
+    contentWrapper.className = 'flex flex-col gap-1';
+
+    const messageContent = document.createElement('div');
+    messageContent.className = `px-4 py-3 rounded-2xl backdrop-blur-sm ${
+      sender === 'user' 
+        ? 'bg-gradient-to-br from-white to-white/90 text-black' 
+        : 'bg-gradient-to-br from-white/10 to-white/5 border border-white/10 text-white/90'
+    }`;
+
+    const text = document.createElement('p');
+    text.className = 'text-sm';
+    text.textContent = message;
+
+    const label = document.createElement('span');
+    label.className = `text-[10px] ${sender === 'user' ? 'text-white/40 mr-2 text-right' : 'text-white/40 ml-2'}`;
+    label.textContent = sender === 'user' ? 'You' : 'Assistant';
+
+    messageContent.appendChild(text);
+    contentWrapper.appendChild(messageContent);
+    contentWrapper.appendChild(label);
+
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(contentWrapper);
+
+    chatMessages?.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+</script>
+
+<style>
+  #chat-messages::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  #chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  #chat-messages::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  #chat-messages::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  @keyframes slide-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .animate-slide-in {
+    animation: slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style> 

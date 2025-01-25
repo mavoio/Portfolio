@@ -1,0 +1,169 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Preloader from '../components/Preloader.astro';
+import ContactModal from '../components/ContactModal.astro';
+import SkillsSection from '../components/SkillsSection.astro';
+import ProjectsSection from '../components/ProjectsSection.astro';
+import TestimonialsSection from '../components/TestimonialsSection.astro';
+import ResumeSection from '../components/ResumeSection.astro';
+import SocialsSection from '../components/SocialsSection.astro';
+
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+---
+
+<Layout title="Danish - Developer">
+	<Preloader />
+	<ContactModal />
+	<main class="relative bg-black min-h-screen overflow-hidden">
+		<!-- Hero Section -->
+		<div class="relative">
+			<!-- Animated background elements -->
+			<div class="absolute inset-0 w-full h-full">
+				<div class="absolute w-[500px] h-[500px] bg-gradient-to-r from-white/10 to-transparent rounded-full blur-3xl -top-48 -right-48 animate-blob"></div>
+				<div class="absolute w-[500px] h-[500px] bg-gradient-to-r from-white/10 to-transparent rounded-full blur-3xl -bottom-48 -left-48 animate-blob animation-delay-2000"></div>
+			</div>
+
+			<!-- Grid background -->
+			<div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,black_70%,transparent_100%)]"></div>
+
+			<div class="relative px-6 pt-14 lg:px-8">
+				<div class="mx-auto max-w-5xl py-32 sm:py-48 lg:py-56">
+					<div class="text-center">
+						<div class="flex items-center justify-center mb-8 animate-fade-in">
+							<span class="text-sm uppercase tracking-[0.4em] text-neutral-400 relative">
+								Full Stack Developer
+								<span class="absolute -bottom-2 left-1/2 w-10 h-px bg-white/20 -translate-x-1/2"></span>
+							</span>
+						</div>
+
+						<div class="overflow-hidden">
+							<h1 class="text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight text-white animate-title pb-4">
+								<span class="block">Hi, I'm Danish</span>
+							</h1>
+						</div>
+
+						<p class="mt-8 text-lg leading-8 text-neutral-300 max-w-2xl mx-auto animate-fade-in animation-delay-500">
+							A passionate developer from Bangalore, India, crafting exceptional digital experiences. Transforming ideas into elegant, high-performance solutions.
+						</p>
+
+						<div class="mt-12 flex items-center justify-center gap-x-8 animate-fade-in animation-delay-1000">
+							<button 
+								id="contact-button"
+								class="group relative inline-flex items-center gap-2 px-8 py-4 text-sm"
+							>
+								<span class="absolute inset-0 border border-white/40 group-hover:border-white/0 transition-colors duration-500"></span>
+								<span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 duration-500"></span>
+								<span class="relative text-white group-hover:text-black duration-500">Get in touch</span>
+								<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 relative text-white group-hover:text-black duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+								</svg>
+							</button>
+							<div class="flex items-center gap-4">
+								<a href="#projects" class="group inline-flex items-center gap-2 text-sm text-neutral-400 hover:text-white duration-500">
+									<span>Projects</span>
+									<span class="relative mt-0.5 group-hover:translate-x-2 duration-500">→</span>
+								</a>
+								<span class="text-white/20">|</span>
+								<a href="#skills" class="group inline-flex items-center gap-2 text-sm text-neutral-400 hover:text-white duration-500">
+									<span>Skills</span>
+									<span class="relative mt-0.5 group-hover:translate-x-2 duration-500">→</span>
+								</a>
+								<span class="text-white/20">|</span>
+								<a href="#resume" class="group inline-flex items-center gap-2 text-sm text-neutral-400 hover:text-white duration-500">
+									<span>Resume</span>
+									<span class="relative mt-0.5 group-hover:translate-x-2 duration-500">→</span>
+								</a>
+							</div>
+						</div>
+
+						<!-- Scroll indicator -->
+						<div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-fade-in animation-delay-1500">
+							<div class="flex flex-col items-center gap-2">
+								<span class="text-xs text-neutral-500 tracking-widest uppercase">Scroll</span>
+								<div class="w-px h-8 bg-gradient-to-b from-white/20 to-transparent"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Projects Section -->
+		<ProjectsSection />
+
+		<!-- Skills Section -->
+		<SkillsSection />
+
+		<!-- Resume Section -->
+		<ResumeSection />
+
+		<!-- Testimonials Section -->
+		<TestimonialsSection />
+
+		<!-- Socials Section -->
+		<SocialsSection />
+	</main>
+</Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const contactButton = document.getElementById('contact-button');
+		const modal = document.getElementById('contact-modal');
+
+		if (contactButton && modal) {
+			contactButton.addEventListener('click', () => {
+				modal.classList.remove('hidden');
+				modal.classList.add('flex');
+			});
+		}
+	});
+</script>
+
+<style>
+	@keyframes blob {
+		0%, 100% { transform: translate(0, 0) scale(1); }
+		25% { transform: translate(20px, -50px) scale(1.1); }
+		50% { transform: translate(-20px, 20px) scale(0.9); }
+		75% { transform: translate(40px, 40px) scale(0.95); }
+	}
+
+	@keyframes title {
+		from { transform: translateY(100%); opacity: 0; }
+		to { transform: translateY(0); opacity: 1; }
+	}
+
+	.animate-blob {
+		animation: blob 20s infinite;
+	}
+
+	.animate-title {
+		animation: title 1s cubic-bezier(0.5, 0, 0.1, 1) forwards;
+	}
+
+	.animate-fade-in {
+		animation: fadeIn 1s ease-out forwards;
+		opacity: 0;
+	}
+
+	.animation-delay-500 {
+		animation-delay: 500ms;
+	}
+
+	.animation-delay-1000 {
+		animation-delay: 1000ms;
+	}
+
+	.animation-delay-1500 {
+		animation-delay: 1500ms;
+	}
+
+	.animation-delay-2000 {
+		animation-delay: 2000ms;
+	}
+
+	@keyframes fadeIn {
+		from { opacity: 0; transform: translateY(20px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+</style>
