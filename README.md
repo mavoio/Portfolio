@@ -29,13 +29,6 @@
 - [TypeScript](https://www.typescriptlang.org) - JavaScript with syntax for types
 - [Vercel](https://vercel.com) - Deploy with zero configuration
 
-## 🌟 Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/danishfolio&type=Date)](https://star-history.com/#yourusername/danishfolio&Date)
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🤝 Contributing
 
@@ -44,13 +37,5 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 ## 💖 Support
 
 If you like this project, please consider giving it a ⭐️!
-
-## 👤 Author
-
-**Your Name**
-- Twitter: [@yourhandle](https://twitter.com/yourhandle)
-- GitHub: [@yourusername](https://github.com/yourusername)
-
----
 
 <p align="center">Made with ❤️ and ☕️</p>
